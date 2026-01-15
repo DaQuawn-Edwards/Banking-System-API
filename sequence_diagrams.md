@@ -1,4 +1,6 @@
 # Create account
+
+```mermaid
 sequenceDiagram
   autonumber
   actor Client
