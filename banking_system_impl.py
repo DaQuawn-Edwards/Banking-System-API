@@ -24,4 +24,4 @@ class BankingSystemImpl(BankingSystem):
         return self.store.pay(timestamp, account_id, amount)
     
     def get_transactions(self, timestamp:int, account_id: str):
-        return self.store.get_transactions(account_id)
+        return self.store.get_transactions(timestamp, account_id)

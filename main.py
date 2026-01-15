@@ -142,12 +142,15 @@ def pay(request: PayRequest):
     return PaymentResponse(payment_id=payment_id)
 
 @app.get("/accounts/{account_id}/transactions", response_model=TransactionResponse)
-def get_transactions(account_id: str):
-    transactions = bank.get_transactions(account_id)
-    if transactions in None:
+def get_transactions(timestamp:int, account_id: str):
+    txns = bank.get_transactions(timestamp, account_id)
+    if txns is None:
         raise HTTPException(
             status_code=404,
             detail= "account not found"
         )
     
-    return transactions
+    return TransactionResponse(
+        account_id=account_id,
+        transactions=txns
+    )
