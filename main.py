@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Optional, List
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
@@ -53,6 +54,18 @@ class BalanceResponse(BaseModel):
 
 class PaymentResponse(BaseModel):
     payment_id: str
+
+class Transaction(BaseModel):
+    transaction_id: int
+    timestamp: int
+    operation: str
+    amount: int
+    payment_ref: Optional[str] = None
+    deposited: Optional[bool] = None
+
+class TransactionResponse(BaseModel):
+    account_id: str
+    transactions: List[Transaction]
 
 
 # -------------------------------------------------
@@ -127,3 +140,14 @@ def pay(request: PayRequest):
             detail="Payment failed",
         )
     return PaymentResponse(payment_id=payment_id)
+
+@app.get("/accounts/{account_id}/transactions", response_model=TransactionResponse)
+def get_transactions(account_id: str):
+    transactions = bank.get_transactions(account_id)
+    if transactions in None:
+        raise HTTPException(
+            status_code=404,
+            detail= "account not found"
+        )
+    
+    return transactions

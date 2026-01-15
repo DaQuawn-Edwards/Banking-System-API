@@ -289,3 +289,29 @@ class BankingStore:
 
                 cur.execute("COMMIT")
                 return payment_id
+            
+    def get_transactions(self, timestamp: int, account_id: str) -> list[dict] | None:
+        with psycopg.connect(self.dsn, row_factory=dict_row) as conn:
+            with conn.cursor() as cur:
+
+                cur.execute("BEGIN")
+                self._process_cashbacks(cur, timestamp)
+
+                # check if the acct exists
+                cur.execute(
+                    "SELECT 1 FROM accounts" \
+                    "WHERE account_id = %s",
+                    (account_id)
+                )
+
+                # if acct doesnt exist, return None
+                if cur.fetchone() in None:
+                    return None
+                cur.execute(
+                    "SELECT * FROM ledger_trnsactions" \
+                    "WHERE account_id = %s" \
+                    "ORDER BY timestamp, transaction_id",
+                    (account_id)
+                )
+
+                return cur.fetchall()
