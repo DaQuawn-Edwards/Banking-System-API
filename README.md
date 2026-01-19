@@ -116,7 +116,7 @@ psql "postgresql://bank_user:bank_pass@127.0.0.1:5432/banking_db" -f schema.sql
 make dev
 ```
 Swagger UI:
-- https://localhost:800/docs
+- https://localhost:8000/docs
 
 ---
 
