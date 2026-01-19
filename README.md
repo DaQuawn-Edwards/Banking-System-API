@@ -30,6 +30,7 @@ Most “banking API” demos are CRUD-only. This project focuses on:
 ## Architecture
 
 ### Layered design
+```
 Client (Swagger/curl)
 ↓ HTTP/JSON
 FastAPI (main.py)
@@ -39,6 +40,7 @@ BankingSystemImpl (domain adapter)
 BankingStore (psycopg + SQL transactions/locks)
 ↓ SQL
 PostgreSQL (accounts + ledger_transactions)
+```
 
 ### Key database tables
 
